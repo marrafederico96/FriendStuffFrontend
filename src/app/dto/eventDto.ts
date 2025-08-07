@@ -1,10 +1,10 @@
 export interface EventDto {
     eventName: string,
-    normalizedEventName: string,
-    startDate: Date,
-    endDate: Date,
+    normalizedEventName?: string,
+    startDate: string,
+    endDate: string,
     adminEmail: string,
-    participants: Participants[]
+    participants?: Participants[]
 }
 
 export interface Participants {

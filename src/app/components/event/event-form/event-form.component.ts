@@ -57,24 +57,26 @@ export class EventFormComponent implements OnInit {
             const formattedStartDate = this.formatDate(formValue.startDate as Date);
             const formattedEndDate = this.formatDate(formValue.endDate as Date);
 
-            const eventData = {
-                ...formValue,
-                startDate: formattedStartDate,
-                endDate: formattedEndDate,
-                adminEmail: email
-            };
+            if (email !== undefined) {
+                const eventData: EventDto = {
+                    startDate: formattedStartDate,
+                    endDate: formattedEndDate,
+                    adminEmail: email,
+                    eventName: formValue.eventName,
+                };
 
-            this.eventService.createEvent(eventData).subscribe({
-                next: () => {
-                    this.authService.loadUserInfo();
-                    this.dialogRef.close(this.eventForm.value);
-                    this.loading.set(false);
-                },
-                error: () => {
-                    this.error = "Error. Please try again.";
-                    this.loading.set(false);
-                }
-            })
+                this.eventService.createEvent(eventData).subscribe({
+                    next: () => {
+                        this.authService.loadUserInfo();
+                        this.dialogRef.close(this.eventForm.value);
+                        this.loading.set(false);
+                    },
+                    error: () => {
+                        this.error = "Error. Please try again.";
+                        this.loading.set(false);
+                    }
+                })
+            }
         }
     }
     private formatDate(date: Date): string {
