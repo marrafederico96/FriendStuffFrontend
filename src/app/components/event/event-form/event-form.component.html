@@ -1,7 +1,7 @@
 <h2 mat-dialog-title>Create Event</h2>
 <mat-dialog-content>
     <form [formGroup]="eventForm" (ngSubmit)="onSubmit()">
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="outline" style="margin-top: 10px;">
             <mat-label for="eventName">Event Name</mat-label>
             <input matInput placeholder="Event Name" id="eventName" type="text" formControlName="eventName" />
         </mat-form-field>
