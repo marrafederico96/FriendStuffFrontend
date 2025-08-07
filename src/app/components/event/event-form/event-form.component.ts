@@ -51,16 +51,16 @@ export class EventFormComponent implements OnInit {
     onSubmit() {
         this.loading.set(true);
         if (this.eventForm.valid) {
-            const newEvent: EventDto = this.eventForm.value;
-            const email = this.authService.userInfo()?.email;
-            if (email !== undefined) {
-                newEvent.adminEmail = email;
-            }
+            const formValue = this.eventForm.value;
+        const newEvent: EventDto = { ...formValue };
+        const email = this.authService.userInfo()?.email;
+        if (email !== undefined) {
+            newEvent.adminEmail = email;
+        }
 
-            newEvent.eventName = formValue.eventName,
-            newEvent.startDate = new Date(formValue.startDate).toISOString(),
-            newEvent.endDate = new Date(formValue.endDate).toISOString(),
-          
+        newEvent.startDate = formValue.startDate;
+        newEvent.endDate = formValue.endDate;
+
             this.eventService.createEvent(newEvent).subscribe({
                 next: () => {
                     this.authService.loadUserInfo();
