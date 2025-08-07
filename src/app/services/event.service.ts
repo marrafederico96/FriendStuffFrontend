@@ -10,7 +10,7 @@ import { AddMemberDto, SearchUserDto } from '../dto/userInfoDto';
 export class EventService {
     private http = inject(HttpClient);
 
-    private url = `https://localhost:7111/api`;
+    private url = `http://localhost:5123/api`;
 
     createEvent(eventData: EventDto): Observable<void> {
         return this.http.post<void>(`${this.url}/event/create`, eventData);

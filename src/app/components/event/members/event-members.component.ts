@@ -93,17 +93,28 @@ export class EventFormComponent implements OnInit {
     }
 
     onSubmit() {
-        const formValue = this.searchForm.value;
-        const username: SearchUserDto = { username: formValue.searchUser ?? '' };
-        this.eventService.searchUser(username).subscribe({
-            next: (response) => {
-                this.username = response.username;
+        const searchUserValue = this.searchForm.value.searchUser?.trim();
+
+        if (searchUserValue) {
+            const username: SearchUserDto = { username: searchUserValue };
+            this.eventService.searchUser(username).subscribe({
+                next: (response) => {
+                    this.username = response.username;
+                    this.error = "";
+                    this.searchForm.reset();
+                },
+                error: () => {
+                    this.error = "User not found";
+                    setTimeout(() => {
+                        this.error = "";
+                    }, 3000);
+                }
+            });
+        } else {
+            this.error = "Inserisci un valore per la ricerca";
+            setTimeout(() => {
                 this.error = "";
-                this.searchForm.reset();
-            },
-            error: () => {
-                this.error = "User not found";
-            }
-        });
+            }, 3000);
+        }
     }
 }
