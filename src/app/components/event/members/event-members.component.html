@@ -1,0 +1,48 @@
+<form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="outline" style="flex: 1;">
+        <mat-label>Search Member</mat-label>
+        <input matInput placeholder="Type a name" name="searchTerm" formControlName="searchUser" />
+
+        <button mat-icon-button matSuffix type="submit">
+            <mat-icon>search</mat-icon>
+        </button>
+    </mat-form-field>
+    @if(error) {
+    <mat-error style="margin-bottom: 20px;">{{error}}</mat-error>
+    }
+</form>
+
+@if(username != undefined) {
+<mat-chip style="margin-bottom: 10px;">
+    {{username}}
+    @if(!isUsernameParticipant()) {
+    <button matChipRemove (click)="addMember()">
+        <mat-icon>add</mat-icon>
+    </button>
+    } @else {
+    <small>(Added)</small>
+    }
+
+</mat-chip>
+<mat-divider style="margin-bottom: 20px;"></mat-divider>
+}
+
+<mat-card appearance="outlined">
+    <mat-card-header>
+        <mat-card-title>Members</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <mat-chip-set>
+            @for (participant of eventUser()?.participants; track participant){
+            <mat-chip>
+                {{ participant.userName }} ({{ eventService.getRole(participant.role) }})
+                @if (eventService.getRole(participant.role) === "Member") {
+                <button matChipRemove (click)="removeMember(participant.userName)">
+                    <mat-icon>cancel</mat-icon>
+                </button>
+                }
+            </mat-chip>
+            }
+        </mat-chip-set>
+    </mat-card-content>
+</mat-card>

@@ -1,0 +1,14 @@
+.mat-toolbar {
+    justify-content: space-between;
+}
+
+.mat-toolbar h1>a {
+    font-size: 1.5rem;
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}

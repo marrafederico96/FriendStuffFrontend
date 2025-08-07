@@ -1,0 +1,74 @@
+<section class="form-container">
+    @if (!isLogin) {
+    <h2>Register</h2>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="outline">
+            <mat-label for="username">Username</mat-label>
+            <input matInput placeholder="Username" id="username" type="text" formControlName="username" />
+            <mat-icon matPrefix>person</mat-icon>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label for="email">Email</mat-label>
+            <input matInput placeholder="Email" id="email" type="email" formControlName="email" />
+            <mat-icon matPrefix>email</mat-icon>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label for="password">Password</mat-label>
+            <input matInput placeholder="Password" id="password" [type]="hidePassword() ? 'password' : 'text'"
+                formControlName="password" />
+            <mat-icon matPrefix>password</mat-icon>
+            <button type="button" mat-icon-button matSuffix (click)="showPassword()">
+                <mat-icon>{{hidePassword() ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label for="confirmPassword">Confirm Password</mat-label>
+            <input matInput placeholder="Confirm Password" id="confirmPassword"
+                [type]="hideConfirmPassword() ? 'password' : 'text'" formControlName="confirmPassword" />
+            <mat-icon matPrefix>password</mat-icon>
+            <button type="button" mat-icon-button matSuffix (click)="showConfirmPassword()">
+                <mat-icon>{{hideConfirmPassword() ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+        </mat-form-field>
+
+        @if (error) {
+        <mat-error class="error">{{error}}</mat-error>
+        }
+        <button type=" submit" [disabled]="loading()" matButton="filled">
+            @if (loading()) {
+            <mat-spinner diameter="20"></mat-spinner>
+            } @else {
+            Register}</button>
+        <small class="form-link">Already register?<a href=" /account/login">Login</a></small>
+    </form>
+    } @else {
+    <h2>Login</h2>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="outline">
+            <mat-label for="email">Email</mat-label>
+            <input matInput placeholder="Email" id="email" type="email" formControlName="email" />
+            <mat-icon matPrefix>email</mat-icon>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label for="password">Password</mat-label>
+            <input matInput placeholder="Password" id="password" [type]="hidePassword() ? 'password' : 'text'"
+                formControlName="password" />
+            <mat-icon matPrefix>password</mat-icon>
+            <button type="button" mat-icon-button matSuffix (click)="showPassword()">
+                <mat-icon>{{hidePassword() ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+        </mat-form-field>
+        @if (error) {
+        <mat-error class="error">{{error}}</mat-error>
+        }
+        <button [disabled]="loading()" type="submit" matButton="filled">
+            @if (loading()) {
+            <mat-spinner diameter="20"></mat-spinner>
+            } @else {
+            Login
+            }</button>
+
+        <small class="form-link">New user?<a href="/account/register">Register</a></small>
+    </form>
+    }
+</section>

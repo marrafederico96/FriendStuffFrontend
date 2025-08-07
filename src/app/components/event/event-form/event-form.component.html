@@ -1,0 +1,29 @@
+<h2 mat-dialog-title>Create Event</h2>
+<mat-dialog-content>
+    <form [formGroup]="eventForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="outline">
+            <mat-label for="eventName">Event Name</mat-label>
+            <input matInput placeholder="Event Name" id="eventName" type="text" formControlName="eventName" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label for="startDate">Start Date</mat-label>
+            <input matInput placeholder="Start Date" id="startDate" type="date" formControlName="startDate" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label for="endDate">End Date</mat-label>
+            <input matInput placeholder="End Date" id="endDate" type="date" formControlName="endDate" />
+        </mat-form-field>
+        @if(error) {
+        <mat-error>{{error}}</mat-error>
+        }
+        <mat-dialog-actions>
+            <button matButton="filled" type="submit" [disabled]="loading()">
+                @if (loading()) {
+                <mat-spinner diameter="20"></mat-spinner>
+                } @else {
+                Add Event
+                }</button>
+            <button matButton="filled" type="button" (click)="closeDialog()">Close</button>
+        </mat-dialog-actions>
+    </form>
+</mat-dialog-content>

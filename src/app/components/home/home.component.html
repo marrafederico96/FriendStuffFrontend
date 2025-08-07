@@ -1,0 +1,23 @@
+<section style=" margin-top: 10px;">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2>Your Events</h2>
+        <button mat-icon-button (click)="openDialog()"><mat-icon>add</mat-icon></button>
+    </div>
+    <div class="event-container">
+        @if(this.authService.userEvents().length > 0) {
+        @for (evt of this.authService.userEvents(); track evt) {
+        <a matButton="outlined" href="/event/{{evt.normalizedEventName}}">
+            <small>{{ evt.eventName.toUpperCase() }}</small><br>
+            <small>{{ evt.startDate }} to {{ evt.endDate }}</small><br>
+            @for (user of evt.participants; track user) {
+            @if(user.role == 0) {
+            <small>{{ user.userName }} <span>({{ eventService.getRole(user.role)}})</span></small>
+            }
+            }
+        </a>
+        }
+        } @else {
+        <p>You don't have any events yet.</p>
+        }
+    </div>
+</section>

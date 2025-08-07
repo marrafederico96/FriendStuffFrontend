@@ -1,0 +1,17 @@
+.event-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 10px;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.event-container a {
+    display: block;
+    width: 100%;
+    height: auto;
+    text-decoration: none;
+    color: #e3e2e6;
+}
