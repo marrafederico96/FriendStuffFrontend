@@ -6,10 +6,11 @@ import { provideClientHydration, withEventReplay } from '@angular/platform-brows
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { authInterceptor } from './services/auth.interceptor';
 import { provideServiceWorker } from '@angular/service-worker';
-
+import { provideNativeDateAdapter } from '@angular/material/core';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideNativeDateAdapter(),
     provideHttpClient(
       withFetch(),
       withInterceptors([authInterceptor]),

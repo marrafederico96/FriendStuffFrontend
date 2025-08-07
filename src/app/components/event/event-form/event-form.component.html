@@ -7,11 +7,15 @@
         </mat-form-field>
         <mat-form-field appearance="outline">
             <mat-label for="startDate">Start Date</mat-label>
-            <input matInput placeholder="Start Date" id="startDate" type="date" formControlName="startDate" />
+            <input matInput [matDatepicker]="pickerStart" formControlName="startDate" readonly>
+            <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
+            <mat-datepicker #pickerStart></mat-datepicker>
         </mat-form-field>
         <mat-form-field appearance="outline">
             <mat-label for="endDate">End Date</mat-label>
-            <input matInput placeholder="End Date" id="endDate" type="date" formControlName="endDate" />
+            <input matInput [matDatepicker]="pickerEnd" formControlName="endDate" readonly>
+            <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+            <mat-datepicker #pickerEnd></mat-datepicker>
         </mat-form-field>
         @if(error) {
         <mat-error>{{error}}</mat-error>

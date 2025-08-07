@@ -14,11 +14,11 @@ import { EventService } from '../../../services/event.service';
 import { AuthService } from '../../../services/auth.service';
 import { EventDto } from '../../../dto/eventDto';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 @Component({
     selector: 'app-event-form',
-    imports: [ReactiveFormsModule, MatProgressSpinnerModule, MatDialogTitle, MatDialogActions, MatDialogContent, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule],
+    imports: [ReactiveFormsModule, MatDatepickerModule, MatProgressSpinnerModule, MatDialogTitle, MatDialogActions, MatDialogContent, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule],
     templateUrl: './event-form.component.html',
     styleUrl: './event-form.component.scss'
 })
@@ -40,8 +40,8 @@ export class EventFormComponent implements OnInit {
     generateForm() {
         this.eventForm = this.fb.group({
             eventName: ['', Validators.required],
-            startDate: [null, Validators.required],
-            endDate: [null, Validators.required],
+            startDate: [new Date(), Validators.required],
+            endDate: [new Date(), Validators.required],
         });
     }
 
@@ -52,12 +52,19 @@ export class EventFormComponent implements OnInit {
     onSubmit() {
         this.loading.set(true);
         if (this.eventForm.valid) {
-            const newEvent: EventDto = this.eventForm.value;
-            const email = this.authService.userInfo()?.email;
-            if (email !== undefined) {
-                newEvent.adminEmail = email;
-            }
-            this.eventService.createEvent(this.eventForm.value).subscribe({
+            const email = this.authService.userInfo()!.email;
+            const rawValue = this.eventForm.getRawValue();
+            const formattedStartDate = this.formatDate(rawValue.startDate as Date);
+            const formattedEndDate = this.formatDate(rawValue.endDate as Date);
+
+            const eventData = {
+                ...rawValue,
+                startDate: formattedStartDate,
+                endDate: formattedEndDate,
+                adminEmail: email
+            };
+
+            this.eventService.createEvent(eventData).subscribe({
                 next: () => {
                     this.authService.loadUserInfo();
                     this.dialogRef.close(this.eventForm.value);
@@ -70,5 +77,10 @@ export class EventFormComponent implements OnInit {
             })
         }
     }
-
+    private formatDate(date: Date): string {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
 }
