@@ -15,6 +15,7 @@ import { AuthService } from '../../../services/auth.service';
 import { EventDto } from '../../../dto/eventDto';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
+
 @Component({
     selector: 'app-event-form',
     imports: [ReactiveFormsModule, MatProgressSpinnerModule, MatDialogTitle, MatDialogActions, MatDialogContent, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule],
@@ -56,7 +57,8 @@ export class EventFormComponent implements OnInit {
             if (email !== undefined) {
                 newEvent.adminEmail = email;
             }
-            this.eventService.createEvent(this.eventForm.value).subscribe({
+
+            this.eventService.createEvent(newEvent).subscribe({
                 next: () => {
                     this.authService.loadUserInfo();
                     this.dialogRef.close(this.eventForm.value);
