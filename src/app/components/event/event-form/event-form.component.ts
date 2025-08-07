@@ -57,11 +57,9 @@ export class EventFormComponent implements OnInit {
                 newEvent.adminEmail = email;
             }
 
-            newEvent = {
-              eventName: formValue.eventName,
-              startDate: new Date(formValue.startDate).toISOString(),
-              endDate: new Date(formValue.endDate).toISOString(),
-            };
+            newEvent.eventName = formValue.eventName,
+            newEvent.startDate = new Date(formValue.startDate).toISOString(),
+            newEvent.endDate = new Date(formValue.endDate).toISOString(),
           
             this.eventService.createEvent(newEvent).subscribe({
                 next: () => {
