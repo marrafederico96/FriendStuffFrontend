@@ -1,10 +1,13 @@
+import { ExpenseDto } from "./expenseDto"
+
 export interface EventDto {
     eventName: string,
     normalizedEventName?: string,
     startDate: string,
     endDate: string,
     adminEmail: string,
-    participants?: Participants[]
+    participants?: Participants[],
+    expensesEvent?: ExpenseDto[]
 }
 
 export interface Participants {

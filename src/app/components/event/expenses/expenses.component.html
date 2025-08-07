@@ -1,0 +1,32 @@
+<form [formGroup]="expenseForm" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="outline" style="flex: 1;">
+        <mat-label>Expense Name</mat-label>
+        <input matInput placeholder=" Expense Name" type="text" formControlName="expenseName" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>Amount</mat-label>
+        <input matInput placeholder="Amount" type="number" formControlName="amount" />
+    </mat-form-field>
+    <div>
+        @if (error) {
+        <mat-error>{{error}}</mat-error>
+        }
+        <button matButton="filled" type="submit" [disabled]="loading()">
+            @if(loading()) {
+            <mat-spinner diameter="20"></mat-spinner>
+            } @else {
+            Add
+            }</button>
+    </div>
+</form>
+
+@if(expenses().length > 0) {
+@for (expense of expenses(); track expense) {
+<div>{{expense.expenseName}}</div>
+<div>{{expense.amount}}</div>
+<div>{{expense.payerUsername}}</div>
+<div>{{expense.expenseParticipant}}</div>
+}
+}@else {
+<div>No expenses yet</div>
+}

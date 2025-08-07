@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { EventDto } from '../dto/eventDto';
 import { Observable } from 'rxjs';
 import { AddMemberDto, SearchUserDto } from '../dto/userInfoDto';
+import { ExpenseDto } from '../dto/expenseDto';
 
 @Injectable({
     providedIn: 'root'
@@ -10,7 +11,8 @@ import { AddMemberDto, SearchUserDto } from '../dto/userInfoDto';
 export class EventService {
     private http = inject(HttpClient);
 
-    private url = `https://friendstuffbackend.onrender.com/api`;
+    //private readonly url = "https://friendstuffbackend.onrender.com/api";
+    private readonly url = "https://localhost:7111/api";
 
     createEvent(eventData: EventDto): Observable<void> {
         return this.http.post<void>(`${this.url}/event/create`, eventData);
@@ -27,6 +29,10 @@ export class EventService {
     removeMember(userToRemove: AddMemberDto): Observable<void> {
         return this.http.delete<void>(`${this.url}/event/remove`, { body: userToRemove });
 
+    }
+
+    addExpense(expenseData: ExpenseDto): Observable<void> {
+        return this.http.post<void>(`${this.url}/expense/add`, expenseData);
     }
 
     getRole(role: number): string {

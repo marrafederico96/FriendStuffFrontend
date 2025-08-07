@@ -8,9 +8,10 @@ import { MatCardModule } from "@angular/material/card";
 import { MatListModule } from '@angular/material/list';
 import { MatChipsModule } from "@angular/material/chips";
 import { EventFormComponent } from "./members/event-members.component";
+import { ExpensesComponent } from "./expenses/expenses.component";
 @Component({
   selector: 'app-event',
-  imports: [MatTabsModule, MatListModule, MatCardModule, MatChipsModule, EventFormComponent],
+  imports: [MatTabsModule, MatListModule, MatCardModule, MatChipsModule, EventFormComponent, ExpensesComponent],
   templateUrl: './event.component.html',
   styleUrl: './event.component.scss'
 })
