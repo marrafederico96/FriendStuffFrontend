@@ -57,8 +57,7 @@ export class EventFormComponent implements OnInit {
             if (email !== undefined) {
                 newEvent.adminEmail = email;
             }
-
-            this.eventService.createEvent(newEvent).subscribe({
+            this.eventService.createEvent(this.eventForm.value).subscribe({
                 next: () => {
                     this.authService.loadUserInfo();
                     this.dialogRef.close(this.eventForm.value);
