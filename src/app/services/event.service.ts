@@ -10,7 +10,7 @@ import { AddMemberDto, SearchUserDto } from '../dto/userInfoDto';
 export class EventService {
     private http = inject(HttpClient);
 
-    private url = `http://localhost:5123/api`;
+    private url = `https://friendstuffbackend.onrender.com/api`;
 
     createEvent(eventData: EventDto): Observable<void> {
         return this.http.post<void>(`${this.url}/event/create`, eventData);
