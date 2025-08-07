@@ -58,7 +58,7 @@ export class ExpensesComponent implements OnInit {
         const payerEmail = this.authService.userInfo()?.email;
 
         if (payerEmail != null) {
-            newExpense.payerEmail = payerEmail
+            newExpense.payerUsername = payerEmail
         }
 
         newExpense.eventName = this.eventName();
