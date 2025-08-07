@@ -20,13 +20,25 @@
     </div>
 </form>
 
-@if(expenses().length > 0) {
+@if (expenses().length > 0) {
 @for (expense of expenses(); track expense) {
-<div>{{expense.expenseName}}</div>
-<div>{{expense.amount}}</div>
-<div>{{expense.payerUsername}}</div>
-<div>{{expense.expenseParticipant}}</div>
+<mat-card style="margin-top: 20px;">
+    <mat-card-header>
+        <mat-card-title>
+            {{ expense.expenseName }}
+        </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <div>
+            {{ expense.amount}}
+            {{ expense.payerUsername }}
+            @for (participant of expense.expenseParticipant; track participant) {
+            <div>{{participant}}</div>
+            }
+        </div>
+    </mat-card-content>
+</mat-card>
 }
-}@else {
-<div>No expenses yet</div>
+} @else {
+<h3 style="margin-top: 20px;">No expenses yet</h3>
 }

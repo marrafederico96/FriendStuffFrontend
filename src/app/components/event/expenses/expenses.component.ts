@@ -8,10 +8,12 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { ExpenseDto } from '../../../dto/expenseDto';
 import { AuthService } from '../../../services/auth.service';
 import { ActivatedRoute } from '@angular/router';
+import { MatCardModule } from "@angular/material/card";
+import { MatIconModule } from "@angular/material/icon";
 
 @Component({
     selector: 'app-expense',
-    imports: [MatFormFieldModule, MatButtonModule, ReactiveFormsModule, MatInputModule, MatProgressSpinnerModule],
+    imports: [MatFormFieldModule, MatButtonModule, ReactiveFormsModule, MatInputModule, MatProgressSpinnerModule, MatCardModule, MatIconModule],
     templateUrl: './expenses.component.html',
     styleUrl: './expenses.component.scss'
 })
@@ -40,7 +42,6 @@ export class ExpensesComponent implements OnInit {
         const name = urlSegments[urlSegments.length - 1].path;
         this.eventName.set(name);
         this.generateForm();
-        console.log(this.expenses());
     }
 
     generateForm() {
@@ -66,6 +67,7 @@ export class ExpensesComponent implements OnInit {
             next: () => {
                 this.loading.set(false);
                 this.expenseForm.reset();
+                this.error = undefined;
                 this.authService.loadUserInfo();
             },
             error: () => {
