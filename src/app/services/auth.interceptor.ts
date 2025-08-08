@@ -1,10 +1,12 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { catchError, switchMap, throwError } from 'rxjs';
+import { catchError, switchMap, throwError, of } from 'rxjs';
 import { AuthService } from './auth.service';
+import { Router } from '@angular/router';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
+  const router = inject(Router);
 
   if (
     req.url.includes('register') ||
@@ -22,8 +24,13 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     });
   }
 
+  if (req.url.includes('logout')) {
+    router.navigate(['/']);
+    return next(reqWithJwt);
+  }
+
   return next(reqWithJwt).pipe(
-    catchError(err => {
+    catchError((err) => {
       if (err.status === 401) {
         return authService.refreshToken().pipe(
           switchMap(newTokenDto => {
@@ -34,17 +41,16 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
               });
               return next(newReq);
             } else {
-              authService.logoutUser().subscribe();
+              authService.logoutLocal();
               return throwError(() => err);
             }
           }),
           catchError(() => {
-            authService.logoutUser().subscribe();
+            authService.logoutLocal();
             return throwError(() => err);
           })
         );
       }
-      authService.logoutUser().subscribe();
       return throwError(() => err);
     })
   );

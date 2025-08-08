@@ -52,29 +52,31 @@ export class ExpensesComponent implements OnInit {
     }
 
     onSubmit() {
-        this.loading.set(true);
-        const formData = this.expenseForm.value;
+        if (this.expenseForm.valid) {
+            this.loading.set(true);
+            const formData = this.expenseForm.value;
 
-        const newExpense: ExpenseDto = formData;
-        const payerEmail = this.authService.userInfo()?.email;
+            const newExpense: ExpenseDto = formData;
+            const payerEmail = this.authService.userInfo()?.email;
 
-        if (payerEmail != null) {
-            newExpense.payerUsername = payerEmail
-        }
-
-        newExpense.eventName = this.eventName();
-        this.eventService.addExpense(newExpense).subscribe({
-            next: () => {
-                this.loading.set(false);
-                this.expenseForm.reset();
-                this.error = undefined;
-                this.authService.loadUserInfo();
-            },
-            error: () => {
-                this.loading.set(false);
-                this.error = "Error. Retry."
+            if (payerEmail != null) {
+                newExpense.payerUsername = payerEmail
             }
-        });
+
+            newExpense.eventName = this.eventName();
+            this.eventService.addExpense(newExpense).subscribe({
+                next: () => {
+                    this.loading.set(false);
+                    this.expenseForm.reset();
+                    this.error = undefined;
+                    this.authService.loadUserInfo();
+                },
+                error: () => {
+                    this.loading.set(false);
+                    this.error = "Error. Retry."
+                }
+            });
+        }
     }
 
 

@@ -3,10 +3,11 @@ import { computed, inject, Injectable, PLATFORM_ID, signal } from '@angular/core
 import { isPlatformBrowser } from '@angular/common';
 import { TokenDto } from '../dto/tokenDto';
 import { UserInfoDto } from '../dto/userInfoDto';
-import { tap } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { catchError, switchMap, tap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
 import { LoginDto, RegisterDto } from '../dto/authDto';
 import { environment } from '../../environments/environment';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,7 @@ import { environment } from '../../environments/environment';
 export class AuthService {
   private http = inject(HttpClient);
   private platformId = inject(PLATFORM_ID);
+  private router = inject(Router);
 
   public readonly userInfo = signal<UserInfoDto | null>(null);
   public readonly userEvents = computed(() => this.userInfo()?.events ?? []);
@@ -38,16 +40,25 @@ export class AuthService {
     );
   }
 
-  logoutUser(): Observable<void> {
-    return this.http.post<void>(`${this.url}/account/logout`, {}, { withCredentials: true }).pipe(
-      tap(() => {
-        if (isPlatformBrowser(this.platformId)) {
-          localStorage.removeItem('access_token');
-          this.userInfo.set(null);
-        }
+  logoutUser() {
+    return this.http.post(`${this.url}/account/logout`, {}).pipe(
+      switchMap(() => {
+        this.logoutLocal();
+        return of(null);
+      }),
+      catchError(() => {
+        this.logoutLocal();
+        return of(null);
       })
     );
   }
+
+  logoutLocal() {
+    localStorage.removeItem('access_token');
+    this.userInfo.set(null);
+    this.router.navigate(['/']);
+  }
+
 
   refreshToken(): Observable<TokenDto> {
     return this.http.post<TokenDto>(`${this.url}/account/refresh`, {}, { withCredentials: true });
