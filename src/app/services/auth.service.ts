@@ -6,7 +6,6 @@ import { UserInfoDto } from '../dto/userInfoDto';
 import { tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { LoginDto, RegisterDto } from '../dto/authDto';
-import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +18,9 @@ export class AuthService {
   public readonly userEvents = computed(() => this.userInfo()?.events ?? []);
   public readonly loading = signal<boolean>(true);
 
-  private readonly url = environment.apiUrl;
+  private readonly url = "https://friendstuffbackend.onrender.com/api";
+  //private readonly url = "https://localhost:7111/api";
+
 
   registerUser(registerData: RegisterDto): Observable<void> {
     return this.http.post<void>(`${this.url}/account/register`, registerData);

@@ -4,7 +4,6 @@ import { EventDto } from '../dto/eventDto';
 import { Observable } from 'rxjs';
 import { AddMemberDto, SearchUserDto } from '../dto/userInfoDto';
 import { ExpenseDto } from '../dto/expenseDto';
-import { environment } from '../../environments/environment';
 
 @Injectable({
     providedIn: 'root'
@@ -12,7 +11,8 @@ import { environment } from '../../environments/environment';
 export class EventService {
     private http = inject(HttpClient);
 
-    private readonly url = environment.apiUrl;
+    //private readonly url = "https://localhost:7111/api";
+    private readonly url = "https://friendstuffbackend.onrender.com/api";
 
     createEvent(eventData: EventDto): Observable<void> {
         return this.http.post<void>(`${this.url}/event/create`, eventData);
