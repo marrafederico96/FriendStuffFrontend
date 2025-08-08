@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, PLATFORM_ID, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { TokenDto } from '../dto/tokenDto';
-import { UserInfoDto } from '../dto/userInfoDto';
+import { SearchUserDto, UserInfoDto } from '../dto/userInfoDto';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { LoginDto, RegisterDto } from '../dto/authDto';
@@ -40,20 +40,9 @@ export class AuthService {
   }
 
   logoutUser() {
-    return this.http.post(`${this.url}/account/logout`, this.userInfo()?.userName).pipe(
-      switchMap(() => {
-        localStorage.removeItem('access_token');
-        this.userInfo.set(null);
-        return of(null);
-      }),
-      catchError(() => {
-        localStorage.removeItem('access_token');
-        this.userInfo.set(null);
-        return of(null);
-      })
-    );
+    const username = this.userInfo()?.userName;
+    return this.http.post(`${this.url}/account/logout`, { username });
   }
-
 
   refreshToken(): Observable<TokenDto> {
     return this.http.post<TokenDto>(`${this.url}/account/refresh`, {}, { withCredentials: true });

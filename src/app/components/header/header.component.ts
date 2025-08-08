@@ -17,6 +17,8 @@ export class HeaderComponent {
   public logout() {
     this.authService.logoutUser().subscribe({
       next: () => {
+        localStorage.removeItem('access_token');
+        this.authService.userInfo.set(null);
         window.location.reload();
       }
     })
