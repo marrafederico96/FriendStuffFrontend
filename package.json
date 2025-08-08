@@ -3,10 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "prestart": "NODE_ENV=development node set-env.js",
     "start": "ng serve",
-    "prebuild": "NODE_ENV=production node set-env.js",
-    "build": "node ./set-env.js && ng build --configuration production",
+    "build": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:FriendStuff": "node dist/FriendStuff/server/server.mjs"
@@ -34,7 +32,6 @@
     "@angular/router": "^20.1.6",
     "@angular/service-worker": "^20.1.6",
     "@angular/ssr": "^20.1.5",
-    "dotenv": "^17.2.1",
     "express": "^5.1.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
