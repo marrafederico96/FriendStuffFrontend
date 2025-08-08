@@ -7,6 +7,12 @@
         <mat-label>Amount</mat-label>
         <input matInput placeholder="Amount" type="number" formControlName="amount" />
     </mat-form-field>
+    <mat-card appearance="outlined" formArrayName="participants">
+        @for (item of indexedParticipants(); track item.participant) {
+        <mat-checkbox [formControlName]="item.index">{{ item.participant.userName }}</mat-checkbox>
+        }
+    </mat-card>
+
     <div>
         @if (error) {
         <mat-error style="margin-bottom: 10px;">{{error}}</mat-error>
@@ -22,23 +28,26 @@
 
 @if (expenses().length > 0) {
 @for (expense of expenses(); track expense) {
-<mat-card style="margin-top: 20px;">
+<mat-card appearance="outlined" style="margin-top: 20px;">
     <mat-card-header>
-        <mat-card-title>
-            {{ expense.expenseName }}
-        </mat-card-title>
+        <mat-card-title-group>
+            <mat-card-title>
+                {{ expense.expenseName }}
+            </mat-card-title>
+            <mat-card-subtitle>
+                {{ expense.payerUsername }} payed
+                {{ expense.amount }} euro
+            </mat-card-subtitle>
+        </mat-card-title-group>
     </mat-card-header>
+
     <mat-card-content>
-        <div>
-            {{ expense.amount}}
-            {{ expense.payerUsername }}
-            @for (participant of expense.expenseParticipant; track participant) {
-            <div>{{participant}}</div>
-            }
-        </div>
+        @for (participant of expense.expenseParticipant; track participant) {
+        Participants: <span>{{ participant.userName }}</span>
+        }
     </mat-card-content>
 </mat-card>
 }
 } @else {
-<h3 style="margin-top: 20px;">No expenses yet</h3>
+<h3>No expenses yet</h3>
 }

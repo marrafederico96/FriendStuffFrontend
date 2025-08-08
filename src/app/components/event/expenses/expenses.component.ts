@@ -1,6 +1,6 @@
 import { Component, computed, effect, inject, OnInit, signal } from '@angular/core';
 import { EventService } from '../../../services/event.service';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -10,10 +10,12 @@ import { AuthService } from '../../../services/auth.service';
 import { ActivatedRoute } from '@angular/router';
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatChipsModule } from "@angular/material/chips";
 
 @Component({
     selector: 'app-expense',
-    imports: [MatFormFieldModule, MatButtonModule, ReactiveFormsModule, MatInputModule, MatProgressSpinnerModule, MatCardModule, MatIconModule],
+    imports: [MatFormFieldModule, MatCheckboxModule, MatButtonModule, ReactiveFormsModule, MatInputModule, MatProgressSpinnerModule, MatCardModule, MatIconModule, MatChipsModule],
     templateUrl: './expenses.component.html',
     styleUrl: './expenses.component.scss'
 })
@@ -35,19 +37,39 @@ export class ExpensesComponent implements OnInit {
         const selectedEvent = userEvents?.find((event) => event.normalizedEventName === eventName);
         return selectedEvent?.expensesEvent || [];
     });
+    public expenseParticipants = computed(() => {
+        const userEvents = this.authService.userInfo()?.events;
+        const eventName = this.eventName();
+        const selectedEvent = userEvents?.find(event => event.normalizedEventName === eventName);
+        return selectedEvent?.participants || [];
+    })
 
+    public indexedParticipants = computed(() =>
+        this.expenseParticipants().map((participant, index) => ({ participant, index }))
+    );
+
+    constructor() {
+        effect(() => {
+            this.generateForm();
+        })
+    }
 
     ngOnInit(): void {
         const urlSegments = this.route.snapshot.url;
         const name = urlSegments[urlSegments.length - 1].path;
         this.eventName.set(name);
-        this.generateForm();
+    }
+
+    get participantsFormArray() {
+        return this.expenseForm.get('participants') as FormArray;
     }
 
     generateForm() {
         this.expenseForm = this.fb.group({
             expenseName: [''],
-            amount: [0, Validators.min(0.01)]
+            amount: [0, Validators.min(0.01)],
+            participants: this.fb.array(
+                this.expenseParticipants().map(() => new FormControl(false)))
         });
     }
 
@@ -56,14 +78,22 @@ export class ExpensesComponent implements OnInit {
             this.loading.set(true);
             const formData = this.expenseForm.value;
 
+            const selectedParticipants = this.expenseForm.value.participants
+                .map((checked: boolean, i: number) => checked ? { userName: this.expenseParticipants()[i].userName } : null)
+                .filter((v: string | null) => v !== null);
+
+
             const newExpense: ExpenseDto = formData;
             const payerEmail = this.authService.userInfo()?.email;
 
             if (payerEmail != null) {
                 newExpense.payerUsername = payerEmail
             }
-
+            newExpense.expenseParticipant = selectedParticipants;
             newExpense.eventName = this.eventName();
+
+            console.log(newExpense.expenseParticipant);
+
             this.eventService.addExpense(newExpense).subscribe({
                 next: () => {
                     this.loading.set(false);

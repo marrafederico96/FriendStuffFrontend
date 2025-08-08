@@ -3,5 +3,10 @@ export interface ExpenseDto {
     amount: number,
     eventName: string,
     payerUsername: string,
-    expenseParticipant?: []
+    expenseParticipant?: ExpenseParticipantDto[]
+}
+
+export interface ExpenseParticipantDto {
+    userName: string;
+    eventName?: string;
 }
