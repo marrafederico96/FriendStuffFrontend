@@ -39,6 +39,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
           catchError(() => {
             return authService.logoutUser().pipe(
               switchMap(() => {
+                localStorage.removeItem('access_token');
+                authService.userInfo.set(null);
                 window.location.reload();
                 return throwError(() => err);
               })
