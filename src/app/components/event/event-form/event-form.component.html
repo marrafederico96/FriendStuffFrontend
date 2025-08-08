@@ -1,17 +1,17 @@
 <h2 mat-dialog-title>Create Event</h2>
 <mat-dialog-content>
     <form [formGroup]="eventForm" (ngSubmit)="onSubmit()">
-        <mat-form-field appearance="outline" style="margin-top: 10px;">
+        <mat-form-field appearance="outline" style="margin-top: 10px; width: 100%;">
             <mat-label for="eventName">Event Name</mat-label>
             <input matInput placeholder="Event Name" id="eventName" type="text" formControlName="eventName" />
         </mat-form-field>
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="outline" style="width: 100%;">
             <mat-label for="startDate">Start Date</mat-label>
             <input matInput [matDatepicker]="pickerStart" formControlName="startDate">
             <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
             <mat-datepicker #pickerStart></mat-datepicker>
         </mat-form-field>
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="outline" style="width: 100%;">
             <mat-label for="endDate">End Date</mat-label>
             <input matInput [matDatepicker]="pickerEnd" formControlName="endDate">
             <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>

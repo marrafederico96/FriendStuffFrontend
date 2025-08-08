@@ -15,7 +15,6 @@ import { Router } from '@angular/router';
 export class AuthService {
   private http = inject(HttpClient);
   private platformId = inject(PLATFORM_ID);
-  private router = inject(Router);
 
   public readonly userInfo = signal<UserInfoDto | null>(null);
   public readonly userEvents = computed(() => this.userInfo()?.events ?? []);
@@ -41,22 +40,18 @@ export class AuthService {
   }
 
   logoutUser() {
-    return this.http.post(`${this.url}/account/logout`, {}).pipe(
+    return this.http.post(`${this.url}/account/logout`, this.userInfo()?.userName).pipe(
       switchMap(() => {
-        this.logoutLocal();
+        localStorage.removeItem('access_token');
+        this.userInfo.set(null);
         return of(null);
       }),
       catchError(() => {
-        this.logoutLocal();
+        localStorage.removeItem('access_token');
+        this.userInfo.set(null);
         return of(null);
       })
     );
-  }
-
-  logoutLocal() {
-    localStorage.removeItem('access_token');
-    this.userInfo.set(null);
-    this.router.navigate(['/']);
   }
 
 

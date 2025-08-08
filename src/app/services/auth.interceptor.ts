@@ -3,6 +3,7 @@ import { inject } from '@angular/core';
 import { catchError, switchMap, throwError, of } from 'rxjs';
 import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
+import { TokenDto } from '../dto/tokenDto';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
@@ -24,30 +25,24 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     });
   }
 
-  if (req.url.includes('logout')) {
-    router.navigate(['/']);
-    return next(reqWithJwt);
-  }
-
   return next(reqWithJwt).pipe(
     catchError((err) => {
       if (err.status === 401) {
         return authService.refreshToken().pipe(
-          switchMap(newTokenDto => {
-            if (newTokenDto?.access_token) {
-              localStorage.setItem('access_token', newTokenDto.access_token);
-              const newReq = req.clone({
-                headers: req.headers.set('Authorization', `Bearer ${newTokenDto.access_token}`),
-              });
-              return next(newReq);
-            } else {
-              authService.logoutLocal();
-              return throwError(() => err);
-            }
+          switchMap((newToken: TokenDto) => {
+            localStorage.setItem('access_token', newToken.access_token);
+            const newReq = req.clone({
+              headers: req.headers.set('Authorization', `Bearer ${newToken.access_token}`),
+            });
+            return next(newReq);
           }),
           catchError(() => {
-            authService.logoutLocal();
-            return throwError(() => err);
+            return authService.logoutUser().pipe(
+              switchMap(() => {
+                window.location.reload();
+                return throwError(() => err);
+              })
+            );
           })
         );
       }
