@@ -3,9 +3,9 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "prestart": "NODE_ENV=development node set-env.ts",
+    "prestart": "NODE_ENV=development node set-env.js",
     "start": "ng serve",
-    "prebuild": "NODE_ENV=production node set-env.ts",
+    "prebuild": "NODE_ENV=production node set-env.js",
     "build": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
