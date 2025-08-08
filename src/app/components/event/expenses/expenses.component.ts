@@ -69,7 +69,7 @@ export class ExpensesComponent implements OnInit {
             expenseName: [''],
             amount: [0, Validators.min(0.01)],
             participants: this.fb.array(
-                this.expenseParticipants().map(() => new FormControl(false)))
+                this.expenseParticipants().map(() => new FormControl(false)), [this.atLeastOneCheckedValidator])
         });
     }
 
@@ -107,6 +107,13 @@ export class ExpensesComponent implements OnInit {
                 }
             });
         }
+    }
+
+    atLeastOneCheckedValidator(control: import('@angular/forms').AbstractControl) {
+        const formArray = control as FormArray;
+        return formArray.controls.some(ctrl => ctrl.value === true)
+            ? null
+            : { required: true };
     }
 
 
