@@ -37,12 +37,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
             return next(newReq);
           }),
           catchError(() => {
-            return authService.logoutUser().pipe(
-              switchMap(() => {
-                window.location.reload();
-                return throwError(() => err);
-              })
-            );
+            authService.logoutUser();
+            return throwError(() => err);
           })
         );
       }

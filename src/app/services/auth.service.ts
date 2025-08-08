@@ -40,20 +40,10 @@ export class AuthService {
   }
 
   logoutUser() {
-    return this.http.post(`${this.url}/account/logout`, this.userInfo()?.userName).pipe(
-      switchMap(() => {
-        localStorage.removeItem('access_token');
-        this.userInfo.set(null);
-        return of(null);
-      }),
-      catchError(() => {
-        localStorage.removeItem('access_token');
-        this.userInfo.set(null);
-        return of(null);
-      })
-    );
+    localStorage.removeItem('access_token');
+    this.userInfo.set(null);
+    window.location.reload();
   }
-
 
   refreshToken(): Observable<TokenDto> {
     return this.http.post<TokenDto>(`${this.url}/account/refresh`, {}, { withCredentials: true });

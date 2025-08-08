@@ -15,10 +15,6 @@ export class HeaderComponent {
   public authService = inject(AuthService);
 
   public logout() {
-    this.authService.logoutUser().subscribe({
-      next: () => {
-        window.location.reload();
-      }
-    })
+    this.authService.logoutUser();
   }
 }
