@@ -27,23 +27,23 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
       if (err.status === 401) {
         return authService.refreshToken().pipe(
           switchMap(newTokenDto => {
-            if (newTokenDto && newTokenDto.access_token) {
+            if (newTokenDto?.access_token) {
               localStorage.setItem('access_token', newTokenDto.access_token);
-
               const newReq = req.clone({
                 headers: req.headers.set('Authorization', `Bearer ${newTokenDto.access_token}`),
               });
-
               return next(newReq);
+            } else {
+              authService.logoutUser().subscribe();
+              return throwError(() => err);
             }
-            return throwError(() => authService.logoutUser());
           }),
           catchError(() => {
-            return throwError(() => authService.logoutUser());
+            return throwError(() => err);
           })
         );
       }
-      return throwError(() => authService.logoutUser());
+      return throwError(() => err);
     })
   );
 };
