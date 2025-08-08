@@ -16,4 +16,3 @@ export const environment = {
 `;
 
 writeFileSync(targetPath, envFileContent);
-console.log(`✅ Environment file generated at ${targetPath}`);
