@@ -1,5 +1,4 @@
 <mat-toolbar>
-    @if(!this.authService.loading()) {
     @if(authService.userInfo() != null) {
     <a matButton="outlined" href="/">{{authService.userInfo()?.userName?.toUpperCase()}}
         <mat-icon>home</mat-icon>
@@ -15,7 +14,6 @@
         <a matButton="outlined" href="/account/register">Register</a>
         <a matButton="outlined" href="/account/login">Login</a>
     </nav>
-    }
     }
 </mat-toolbar>
 <mat-divider />

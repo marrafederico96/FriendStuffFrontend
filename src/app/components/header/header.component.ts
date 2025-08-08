@@ -11,12 +11,8 @@ import { MatIconModule } from '@angular/material/icon';
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
   public authService = inject(AuthService);
-
-  ngOnInit(): void {
-    this.authService.loadUserInfo();
-  }
 
   public logout() {
     this.authService.logoutUser().subscribe({
