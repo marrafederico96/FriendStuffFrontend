@@ -50,8 +50,8 @@ export class EventFormComponent implements OnInit {
     }
 
     onSubmit() {
-        this.loading.set(true);
         if (this.eventForm.valid) {
+            this.loading.set(true);
             const email = this.authService.userInfo()!.email;
             const formValue = this.eventForm.value;
             const formattedStartDate = this.formatDate(formValue.startDate as Date);
