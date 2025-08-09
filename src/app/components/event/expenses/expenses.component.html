@@ -47,7 +47,7 @@
             <mat-chip-set style="margin-top: 8px;">
                 @for (participant of expense.expenseParticipant; track participant) {
                 <mat-chip style="margin-right: 6px;">
-                    {{ participant.userName }}
+                    {{ participant.userName }} owed {{participant.amountOwed}}
                 </mat-chip>
                 }
             </mat-chip-set>
