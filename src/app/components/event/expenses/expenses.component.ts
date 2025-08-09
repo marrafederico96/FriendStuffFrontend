@@ -39,12 +39,14 @@ export class ExpensesComponent implements OnInit {
         const selectedEvent = userEvents?.find((event) => event.normalizedEventName === eventName);
         return selectedEvent?.expensesEvent || [];
     });
+
     public expenseParticipants = computed(() => {
         const userEvents = this.authService.userInfo()?.events;
         const eventName = this.eventName();
+        const currentUser = this.authService.userInfo()?.userName;
         const selectedEvent = userEvents?.find(event => event.normalizedEventName === eventName);
-        return selectedEvent?.participants || [];
-    })
+        return (selectedEvent?.participants || []).filter(p => p.userName !== currentUser);
+    });
 
     public indexedParticipants = computed(() =>
         this.expenseParticipants().map((participant, index) => ({ participant, index }))
@@ -81,9 +83,15 @@ export class ExpensesComponent implements OnInit {
             const formData = this.expenseForm.value;
 
             const selectedParticipants = this.expenseForm.value.participants
-                .map((checked: boolean, i: number) => checked ? { userName: this.expenseParticipants()[i].userName } : null)
-                .filter((v: string | null) => v !== null);
+                .map((checked: boolean, i: number) =>
+                    checked ? { userName: this.expenseParticipants()[i].userName } : null
+                )
+                .filter((v: any) => v !== null);
 
+            const currentUserName = this.authService.userInfo()?.userName;
+            if (currentUserName) {
+                selectedParticipants.push({ userName: currentUserName });
+            }
 
             const newExpense: ExpenseEventDto = formData;
             const payerEmail = this.authService.userInfo()?.email;
