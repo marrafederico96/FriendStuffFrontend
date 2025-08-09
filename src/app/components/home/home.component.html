@@ -9,8 +9,11 @@
         <a matButton="outlined" href="/event/{{evt.normalizedEventName}}">
             <mat-card-header>
                 <mat-card-title>
-                    {{ evt.eventName.toUpperCase() }} <small>({{ evt.startDate }} to {{ evt.endDate }})</small>
+                    {{ evt.eventName.toUpperCase() }}
                 </mat-card-title>
+                <mat-card-subtitle>
+                    {{ evt.startDate }} to {{ evt.endDate }}
+                </mat-card-subtitle>
             </mat-card-header>
             <mat-card-footer>
                 <mat-card-content>
