@@ -69,7 +69,7 @@ export class ExpensesComponent implements OnInit {
 
     generateForm() {
         this.expenseForm = this.fb.group({
-            expenseName: ['', Validators.required],
+            expenseName: [''],
             amount: [0, Validators.min(0.01)],
             participants: this.fb.array(
                 this.expenseParticipants().map(() => new FormControl(false)))
