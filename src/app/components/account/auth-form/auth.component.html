@@ -1,7 +1,7 @@
 <section class="form-container">
-    @if (!isLogin) {
+    @if (!isLoginPath) {
     <h2>Register</h2>
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <form [formGroup]="authForm" (ngSubmit)="onSubmit()">
         <mat-form-field appearance="outline">
             <mat-label for="username">Username</mat-label>
             <input matInput placeholder="Username" id="username" type="text" formControlName="username" />
@@ -43,7 +43,7 @@
     </form>
     } @else {
     <h2>Login</h2>
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <form [formGroup]="authForm" (ngSubmit)="onSubmit()">
         <mat-form-field appearance="outline">
             <mat-label for="email">Email</mat-label>
             <input matInput placeholder="Email" id="email" type="email" formControlName="email" />

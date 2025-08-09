@@ -12,9 +12,9 @@
     }
 </form>
 
-@if(username != undefined) {
+@if(userToAdd != undefined) {
 <mat-chip style="margin-bottom: 10px;">
-    {{username}}
+    {{userToAdd}}
     @if(!isUsernameParticipant()) {
     <button matChipRemove (click)="addMember()">
         <mat-icon>add</mat-icon>
@@ -28,7 +28,7 @@
 }
 
 <mat-card appearance="outlined">
-    <mat-card-header>
+    <mat-card-header style="margin-bottom: 10px;">
         <mat-card-title>Members</mat-card-title>
     </mat-card-header>
     <mat-card-content>

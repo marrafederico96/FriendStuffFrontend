@@ -2,9 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { EventDto } from '../dto/eventDto';
 import { Observable } from 'rxjs';
-import { AddMemberDto, SearchUserDto } from '../dto/userInfoDto';
-import { ExpenseDto } from '../dto/expenseDto';
+import { EventMemberDto, UserNameDto } from '../dto/userInfoDto';
 import { environment } from '../../environments/environment';
+import { ExpenseEventDto } from '../dto/expenseEventDto';
 
 @Injectable({
     providedIn: 'root'
@@ -18,20 +18,20 @@ export class EventService {
         return this.http.post<void>(`${this.url}/event/create`, eventData);
     }
 
-    searchUser(username: SearchUserDto): Observable<SearchUserDto> {
-        return this.http.post<SearchUserDto>(`${this.url}/event/search`, username);
+    searchUser(username: UserNameDto): Observable<UserNameDto> {
+        return this.http.post<UserNameDto>(`${this.url}/event/search`, username);
     }
 
-    addMember(userToAdd: AddMemberDto): Observable<AddMemberDto> {
-        return this.http.post<AddMemberDto>(`${this.url}/event/add`, userToAdd);
+    addMember(userToAdd: EventMemberDto): Observable<EventMemberDto> {
+        return this.http.post<EventMemberDto>(`${this.url}/event/add`, userToAdd);
     }
 
-    removeMember(userToRemove: AddMemberDto): Observable<void> {
+    removeMember(userToRemove: EventMemberDto): Observable<void> {
         return this.http.delete<void>(`${this.url}/event/remove`, { body: userToRemove });
 
     }
 
-    addExpense(expenseData: ExpenseDto): Observable<void> {
+    addExpense(expenseData: ExpenseEventDto): Observable<void> {
         return this.http.post<void>(`${this.url}/expense/add`, expenseData);
     }
 

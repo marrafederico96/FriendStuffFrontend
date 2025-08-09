@@ -7,11 +7,11 @@ export interface UserInfoDto {
 }
 
 
-export interface SearchUserDto {
+export interface UserNameDto {
     username: string,
 }
 
-export interface AddMemberDto {
+export interface EventMemberDto {
     username: string,
     normalizedEventName: string,
     adminUsername: string

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { ActivatedRoute } from '@angular/router';
 import { EventDto } from '../../dto/eventDto';
@@ -9,6 +9,8 @@ import { MatListModule } from '@angular/material/list';
 import { MatChipsModule } from "@angular/material/chips";
 import { EventFormComponent } from "./members/event-members.component";
 import { ExpensesComponent } from "./expenses/expenses.component";
+
+
 @Component({
   selector: 'app-event',
   imports: [MatTabsModule, MatListModule, MatCardModule, MatChipsModule, EventFormComponent, ExpensesComponent],

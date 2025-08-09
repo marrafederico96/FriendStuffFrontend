@@ -3,21 +3,33 @@
         <h2>Your Events</h2>
         <button mat-icon-button (click)="openDialog()"><mat-icon>add</mat-icon></button>
     </div>
-    <div class="event-container">
-        @if(this.authService.userEvents().length > 0) {
-        @for (evt of this.authService.userEvents(); track evt) {
+    @if(this.authService.userEvents().length > 0) {
+    @for (evt of this.authService.userEvents(); track evt) {
+    <mat-card appearance="outlined" class="event-container">
         <a matButton="outlined" href="/event/{{evt.normalizedEventName}}">
-            <small>{{ evt.eventName.toUpperCase() }}</small><br>
-            <small>{{ evt.startDate }} to {{ evt.endDate }}</small><br>
-            @for (user of evt.participants; track user) {
-            @if(user.role == 0) {
-            <small>{{ user.userName }} <span>({{ eventService.getRole(user.role)}})</span></small>
-            }
-            }
+            <mat-card-header>
+                <mat-card-title>
+                    {{ evt.eventName.toUpperCase() }} <small>({{ evt.startDate }} to {{ evt.endDate }})</small>
+                </mat-card-title>
+            </mat-card-header>
+            <mat-card-footer>
+                <mat-card-content>
+                    @for (user of evt.participants; track user) {
+                    @if(user.role === 0) {
+                    {{ user.userName }} <span>({{ eventService.getRole(user.role)}})</span>
+
+                    }
+                    }
+                </mat-card-content>
+            </mat-card-footer>
         </a>
-        }
-        } @else {
-        <p>You don't have any events yet.</p>
-        }
-    </div>
+    </mat-card>
+    }
+    } @else {
+    <mat-card appearance="outlined" style="margin-top: 10px;">
+        <mat-card-header>
+            <mat-card-title style="padding-bottom: 16px;">No events found.</mat-card-title>
+        </mat-card-header>
+    </mat-card>
+    }
 </section>

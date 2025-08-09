@@ -1,10 +1,9 @@
-import { Component, effect, inject, model, signal } from '@angular/core';
+import { Component, effect, inject, model } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { EventDto } from '../../dto/eventDto';
 import {
   MatDialog,
 } from '@angular/material/dialog';

@@ -1,8 +1,8 @@
-export interface ExpenseDto {
+export interface ExpenseEventDto {
     expenseName: string,
     amount: number,
-    eventName: string,
     payerUsername: string,
+    eventName: string,
     expenseParticipant?: ExpenseParticipantDto[]
 }
 

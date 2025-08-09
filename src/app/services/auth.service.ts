@@ -2,12 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, PLATFORM_ID, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { TokenDto } from '../dto/tokenDto';
-import { SearchUserDto, UserInfoDto } from '../dto/userInfoDto';
-import { catchError, switchMap, tap } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
+import { UserInfoDto } from '../dto/userInfoDto';
+import { tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { LoginDto, RegisterDto } from '../dto/authDto';
 import { environment } from '../../environments/environment';
-import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -20,9 +19,7 @@ export class AuthService {
   public readonly userEvents = computed(() => this.userInfo()?.events ?? []);
   public readonly loading = signal<boolean>(true);
 
-  //private readonly url = "https://friendstuffbackend.onrender.com/api";
   private readonly url = environment.url;
-
 
   registerUser(registerData: RegisterDto): Observable<void> {
     return this.http.post<void>(`${this.url}/account/register`, registerData);

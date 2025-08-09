@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { MatListModule } from "@angular/material/list";
 import { MatChipsModule } from "@angular/material/chips";
 import { EventService } from '../../../services/event.service';
@@ -10,7 +10,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
-import { AddMemberDto, SearchUserDto } from '../../../dto/userInfoDto';
+import { EventMemberDto, UserNameDto } from '../../../dto/userInfoDto';
 import { MatCardModule } from "@angular/material/card";
 
 @Component({
@@ -23,8 +23,9 @@ export class EventFormComponent implements OnInit {
     public eventService = inject(EventService);
     private authService = inject(AuthService);
     private route = inject(ActivatedRoute);
+
     public event: EventDto | undefined;
-    public username?: string;
+    public userToAdd?: string;
     public error?: string;
 
     eventName = signal('');
@@ -46,16 +47,16 @@ export class EventFormComponent implements OnInit {
 
     isUsernameParticipant(): boolean {
         return !!this.eventUser()?.participants?.find(
-            p => p.userName?.toLowerCase() === this.username?.toLowerCase()
+            p => p.userName?.toLowerCase() === this.userToAdd?.toLowerCase()
         );
     }
 
 
     addMember() {
-        if (this.username != undefined) {
-            const username = this.username.trim().toLowerCase();
+        if (this.userToAdd != undefined) {
+            const username = this.userToAdd.trim().toLowerCase();
             const adminUsername = this.authService.userInfo()?.userName?.trim().toLowerCase();
-            const userToAdd: AddMemberDto = {
+            const userToAdd: EventMemberDto = {
                 adminUsername: adminUsername!,
                 normalizedEventName: this.eventUser()?.normalizedEventName!,
                 username: username
@@ -63,7 +64,7 @@ export class EventFormComponent implements OnInit {
 
             this.eventService.addMember(userToAdd).subscribe({
                 next: () => {
-                    this.username = undefined;
+                    this.userToAdd = undefined;
                     this.authService.loadUserInfo();
                 },
                 error: (err) => {
@@ -73,13 +74,14 @@ export class EventFormComponent implements OnInit {
         }
     }
 
-    removeMember(username: string) {
-        username.trim().toLowerCase();
+    removeMember(usernameToRemove: string) {
+        usernameToRemove.trim().toLowerCase();
         const adminUsername = this.authService.userInfo()?.userName?.trim().toLowerCase();
-        const userToRemove: AddMemberDto = {
+
+        const userToRemove: EventMemberDto = {
             adminUsername: adminUsername!,
             normalizedEventName: this.eventUser()?.normalizedEventName!,
-            username: username
+            username: usernameToRemove
         };
 
         this.eventService.removeMember(userToRemove).subscribe({
@@ -96,10 +98,10 @@ export class EventFormComponent implements OnInit {
         const searchUserValue = this.searchForm.value.searchUser?.trim();
 
         if (searchUserValue) {
-            const username: SearchUserDto = { username: searchUserValue };
+            const username: UserNameDto = { username: searchUserValue };
             this.eventService.searchUser(username).subscribe({
                 next: (response) => {
-                    this.username = response.username;
+                    this.userToAdd = response.username;
                     this.error = "";
                     this.searchForm.reset();
                 },
@@ -111,7 +113,7 @@ export class EventFormComponent implements OnInit {
                 }
             });
         } else {
-            this.error = "Inserisci un valore per la ricerca";
+            this.error = "Insert a value";
             setTimeout(() => {
                 this.error = "";
             }, 3000);

@@ -28,32 +28,33 @@ export class AuthComponent implements OnInit {
   hidePassword = signal(true);
   hideConfirmPassword = signal(true);
 
-  public isLogin = false;
-  public form!: FormGroup;
+  public isLoginPath = false;
+  public authForm!: FormGroup;
 
   ngOnInit(): void {
     const urlSegments = this.route.snapshot.url;
-    this.isLogin = urlSegments.length > 0 && urlSegments[urlSegments.length - 1].path === 'login';
+    this.isLoginPath = urlSegments.length > 0 && urlSegments[urlSegments.length - 1].path === 'login';
     this.generateForm();
   }
 
   showPassword() {
     this.hidePassword.set(!this.hidePassword());
   }
+
   showConfirmPassword() {
     this.hideConfirmPassword.set(!this.hideConfirmPassword());
   }
 
   generateForm() {
-    if (!this.isLogin) {
-      this.form = this.fb.group({
+    if (!this.isLoginPath) {
+      this.authForm = this.fb.group({
         username: ['', Validators.required],
         email: ['', [Validators.email, Validators.required]],
         password: ['', Validators.required],
         confirmPassword: ['', Validators.required]
       });
     } else {
-      this.form = this.fb.group({
+      this.authForm = this.fb.group({
         email: ['', [Validators.email, Validators.required]],
         password: ['', Validators.required],
       });
@@ -61,18 +62,18 @@ export class AuthComponent implements OnInit {
   }
 
   onSubmit() {
-    if (!this.form.valid) return;
+    if (!this.authForm.valid) return;
 
     this.loading.set(true);
     this.error = undefined;
 
-    if (!this.isLogin) {
-      const formData: RegisterDto = this.form.value;
+    if (!this.isLoginPath) {
+      const formData: RegisterDto = this.authForm.value;
       this.authService.registerUser(formData).subscribe({
         next: () => {
           this.loading.set(false);
           this.router.navigate(['/account/login']);
-          this.form.reset();
+          this.authForm.reset();
         },
         error: (err) => {
           this.loading.set(false);
@@ -91,12 +92,12 @@ export class AuthComponent implements OnInit {
         }
       });
     } else {
-      const formData: LoginDto = this.form.value;
+      const formData: LoginDto = this.authForm.value;
       this.authService.loginUser(formData).subscribe({
         next: () => {
           this.loading.set(false);
           this.router.navigate(['/']);
-          this.form.reset();
+          this.authForm.reset();
         },
         error: (err) => {
           this.loading.set(false);

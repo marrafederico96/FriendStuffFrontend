@@ -1,7 +1,12 @@
 <section style="margin-top: 20px;">
     <mat-card appearance="outlined" style="margin-bottom: 20px;">
-        <mat-card-header>{{ event?.eventName }}</mat-card-header>
-        <mat-card-content>{{ event?.startDate }} to {{ event?.endDate }}</mat-card-content>
+        <mat-card-header>
+            <mat-card-title-group>
+                <mat-card-title>{{ event?.eventName }}</mat-card-title>
+                <mat-card-subtitle style="padding-bottom: 16px;">{{ event?.startDate }} to {{ event?.endDate
+                    }}</mat-card-subtitle>
+            </mat-card-title-group>
+        </mat-card-header>
     </mat-card>
     <mat-tab-group dynamicHeight mat-stretch-tabs="true" mat-align-tabs="start" animationDuration="250ms">
         <mat-tab label="Member">

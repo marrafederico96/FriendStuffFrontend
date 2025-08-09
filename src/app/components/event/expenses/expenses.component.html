@@ -30,24 +30,28 @@
 @for (expense of expenses(); track expense) {
 <mat-card appearance="outlined" style="margin-top: 20px;">
     <mat-card-header>
-        <mat-card-title-group>
-            <mat-card-title>
-                {{ expense.expenseName }}
-            </mat-card-title>
-            <mat-card-subtitle>
-                {{ expense.payerUsername }} payed
-                {{ expense.amount }} euro
-            </mat-card-subtitle>
-        </mat-card-title-group>
+        <mat-card-title>
+            <mat-chip>
+                {{ expense.expenseName.toLocaleUpperCase() }}
+                {{ expense.payerUsername }} paid {{ expense.amount }}
+            </mat-chip>
+        </mat-card-title>
     </mat-card-header>
-
     <mat-card-content>
-        @for (participant of expense.expenseParticipant; track participant) {
-        Participants: <span>{{ participant.userName }}</span>
-        }
+        <mat-chip-set style="margin-top: 8px;">
+            @for (participant of expense.expenseParticipant; track participant) {
+            <mat-chip style="margin-right: 6px;">
+                {{ participant.userName }}
+            </mat-chip>
+            }
+        </mat-chip-set>
     </mat-card-content>
 </mat-card>
 }
 } @else {
-<h3 style="margin-top: 20px;">No expenses yet</h3>
+<mat-card appearance="outlined" style="margin-top: 10px;">
+    <mat-card-header>
+        <mat-card-title style="padding-bottom: 16px;">No expense found.</mat-card-title>
+    </mat-card-header>
+</mat-card>
 }

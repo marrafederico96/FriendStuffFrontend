@@ -5,17 +5,19 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
-import { ExpenseDto } from '../../../dto/expenseDto';
+import { ExpenseEventDto } from '../../../dto/expenseEventDto';
 import { AuthService } from '../../../services/auth.service';
 import { ActivatedRoute } from '@angular/router';
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from "@angular/material/chips";
+import { AbstractControl } from '@angular/forms';
+import { MatListModule } from "@angular/material/list";
 
 @Component({
     selector: 'app-expense',
-    imports: [MatFormFieldModule, MatCheckboxModule, MatButtonModule, ReactiveFormsModule, MatInputModule, MatProgressSpinnerModule, MatCardModule, MatIconModule, MatChipsModule],
+    imports: [MatFormFieldModule, MatCheckboxModule, MatButtonModule, ReactiveFormsModule, MatInputModule, MatProgressSpinnerModule, MatCardModule, MatIconModule, MatChipsModule, MatListModule],
     templateUrl: './expenses.component.html',
     styleUrl: './expenses.component.scss'
 })
@@ -83,12 +85,13 @@ export class ExpensesComponent implements OnInit {
                 .filter((v: string | null) => v !== null);
 
 
-            const newExpense: ExpenseDto = formData;
+            const newExpense: ExpenseEventDto = formData;
             const payerEmail = this.authService.userInfo()?.email;
 
             if (payerEmail != null) {
                 newExpense.payerUsername = payerEmail
             }
+
             newExpense.expenseParticipant = selectedParticipants;
             newExpense.eventName = this.eventName();
 
@@ -109,12 +112,10 @@ export class ExpensesComponent implements OnInit {
         }
     }
 
-    atLeastOneCheckedValidator(control: import('@angular/forms').AbstractControl) {
+    atLeastOneCheckedValidator(control: AbstractControl) {
         const formArray = control as FormArray;
         return formArray.controls.some(ctrl => ctrl.value === true)
             ? null
             : { required: true };
     }
-
-
 }

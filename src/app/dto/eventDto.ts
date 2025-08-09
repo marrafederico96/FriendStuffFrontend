@@ -1,4 +1,4 @@
-import { ExpenseDto } from "./expenseDto"
+import { ExpenseEventDto } from "./expenseEventDto"
 
 export interface EventDto {
     eventName: string,
@@ -6,11 +6,11 @@ export interface EventDto {
     startDate: string,
     endDate: string,
     adminEmail: string,
-    participants?: Participants[],
-    expensesEvent?: ExpenseDto[]
+    participants?: EventUserDto[],
+    expensesEvent?: ExpenseEventDto[]
 }
 
-export interface Participants {
+export interface EventUserDto {
     userName: string,
     role: number
 }
