@@ -14,10 +14,11 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from "@angular/material/chips";
 import { AbstractControl } from '@angular/forms';
 import { MatListModule } from "@angular/material/list";
+import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
     selector: 'app-expense',
-    imports: [MatFormFieldModule, MatCheckboxModule, MatButtonModule, ReactiveFormsModule, MatInputModule, MatProgressSpinnerModule, MatCardModule, MatIconModule, MatChipsModule, MatListModule],
+    imports: [MatFormFieldModule, MatDividerModule, MatCheckboxModule, MatButtonModule, ReactiveFormsModule, MatInputModule, MatProgressSpinnerModule, MatCardModule, MatIconModule, MatChipsModule, MatListModule],
     templateUrl: './expenses.component.html',
     styleUrl: './expenses.component.scss'
 })
@@ -68,7 +69,7 @@ export class ExpensesComponent implements OnInit {
 
     generateForm() {
         this.expenseForm = this.fb.group({
-            expenseName: [''],
+            expenseName: ['', Validators.required],
             amount: [0, Validators.min(0.01)],
             participants: this.fb.array(
                 this.expenseParticipants().map(() => new FormControl(false)), [this.atLeastOneCheckedValidator])

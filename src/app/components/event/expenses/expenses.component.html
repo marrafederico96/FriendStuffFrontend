@@ -26,32 +26,39 @@
     </div>
 </form>
 
-@if (expenses().length > 0) {
-@for (expense of expenses(); track expense) {
-<mat-card appearance="outlined" style="margin-top: 20px;">
+<mat-card appearance="raised" style="margin-top: 20px;">
     <mat-card-header>
         <mat-card-title>
-            <mat-chip>
-                {{ expense.expenseName.toLocaleUpperCase() }}
-                {{ expense.payerUsername }} paid {{ expense.amount }}
-            </mat-chip>
+            Expenses
         </mat-card-title>
     </mat-card-header>
-    <mat-card-content>
-        <mat-chip-set style="margin-top: 8px;">
-            @for (participant of expense.expenseParticipant; track participant) {
-            <mat-chip style="margin-right: 6px;">
-                {{ participant.userName }}
-            </mat-chip>
-            }
-        </mat-chip-set>
-    </mat-card-content>
+    @if (expenses().length > 0) {
+    @for (expense of expenses(); track expense) {
+    <mat-card style="margin: 10px;" appearance="outlined">
+        <mat-card-header>
+            <mat-card-title>
+                <mat-chip>
+                    {{ expense.expenseName.toLocaleUpperCase() }}
+                    {{ expense.payerUsername }} paid {{ expense.amount }}
+                </mat-chip>
+            </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <mat-chip-set style="margin-top: 8px;">
+                @for (participant of expense.expenseParticipant; track participant) {
+                <mat-chip style="margin-right: 6px;">
+                    {{ participant.userName }}
+                </mat-chip>
+                }
+            </mat-chip-set>
+        </mat-card-content>
+    </mat-card>
+    }
+    } @else {
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title style="padding-bottom: 16px;">No expense found.</mat-card-title>
+        </mat-card-header>
+    </mat-card>
+    }
 </mat-card>
-}
-} @else {
-<mat-card appearance="outlined" style="margin-top: 10px;">
-    <mat-card-header>
-        <mat-card-title style="padding-bottom: 16px;">No expense found.</mat-card-title>
-    </mat-card-header>
-</mat-card>
-}
