@@ -37,8 +37,7 @@ export class AuthService {
   }
 
   logoutUser() {
-    const username = this.userInfo()?.userName;
-    return this.http.post(`${this.url}/account/logout`, { username });
+    return this.http.post(`${this.url}/account/logout`, {}, { withCredentials: true });
   }
 
   refreshToken(): Observable<TokenDto> {

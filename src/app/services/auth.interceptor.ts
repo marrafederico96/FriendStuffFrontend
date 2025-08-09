@@ -12,7 +12,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   if (
     req.url.includes('register') ||
     req.url.includes('login') ||
-    req.url.includes('refresh')
+    req.url.includes('refresh') ||
+    req.url.includes('logout')
   ) {
     return next(req);
   }
