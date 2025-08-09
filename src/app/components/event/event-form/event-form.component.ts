@@ -71,8 +71,8 @@ export class EventFormComponent implements OnInit {
                         this.dialogRef.close(this.eventForm.value);
                         this.loading.set(false);
                     },
-                    error: () => {
-                        this.error = "Error. Please try again.";
+                    error: (err) => {
+                        this.error = err.error.message;
                         this.loading.set(false);
                     }
                 })

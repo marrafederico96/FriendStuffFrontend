@@ -72,7 +72,7 @@ export class ExpensesComponent implements OnInit {
             expenseName: ['', Validators.required],
             amount: [0, Validators.min(0.01)],
             participants: this.fb.array(
-                this.expenseParticipants().map(() => new FormControl(false)), [this.atLeastOneCheckedValidator])
+                this.expenseParticipants().map(() => new FormControl(false)))
         });
     }
 
@@ -105,18 +105,12 @@ export class ExpensesComponent implements OnInit {
                     this.error = undefined;
                     this.authService.loadUserInfo();
                 },
-                error: () => {
+                error: (err) => {
                     this.loading.set(false);
-                    this.error = "Error. Retry."
+                    this.error = err.error.message;
                 }
             });
         }
     }
 
-    atLeastOneCheckedValidator(control: AbstractControl) {
-        const formArray = control as FormArray;
-        return formArray.controls.some(ctrl => ctrl.value === true)
-            ? null
-            : { required: true };
-    }
 }
