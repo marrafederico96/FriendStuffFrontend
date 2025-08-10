@@ -1,6 +1,6 @@
 <mat-toolbar>
     @if(authService.isLoggedIn() && authService.userInfo() != null) {
-    <a matButton="outlined" href="/">{{authService.userInfo()?.userName?.toUpperCase()}}
+    <a matButton="tonal" href="/">{{authService.userInfo()?.userName?.toUpperCase()}}
         <mat-icon>home</mat-icon>
     </a>
     <nav>
@@ -10,8 +10,8 @@
     <h1><a href="/" matButton>Friend Stuff</a></h1>
     <nav>
 
-        <a matButton="outlined" href="/account/register">Register</a>
-        <a matButton="outlined" href="/account/login">Login</a>
+        <a matButton="tonal" href="/account/register">Register</a>
+        <a matButton="tonal" href="/account/login">Login</a>
     </nav>
     }
 </mat-toolbar>

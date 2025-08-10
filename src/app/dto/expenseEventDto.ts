@@ -11,3 +11,9 @@ export interface ExpenseParticipantDto {
     eventName?: string;
     amountOwed?: number;
 }
+
+export interface ExpenseRefundDto {
+    amountRefund: number,
+    payerUsername: string,
+    debtorUsername: string,
+}

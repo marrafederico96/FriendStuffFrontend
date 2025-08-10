@@ -21,13 +21,13 @@
         <mat-error>{{error}}</mat-error>
         }
         <mat-dialog-actions>
-            <button matButton="filled" type="submit" [disabled]="loading()">
+            <button matButton="tonal" type="submit" [disabled]="loading()">
                 @if (loading()) {
                 <mat-spinner diameter="20"></mat-spinner>
                 } @else {
                 Add Event
                 }</button>
-            <button matButton="filled" type="button" (click)="closeDialog()">Close</button>
+            <button matButton="tonal" type="button" (click)="closeDialog()">Close</button>
         </mat-dialog-actions>
     </form>
 </mat-dialog-content>

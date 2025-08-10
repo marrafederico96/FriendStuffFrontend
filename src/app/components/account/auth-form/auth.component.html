@@ -34,7 +34,7 @@
         @if (error) {
         <mat-error class="error">{{error}}</mat-error>
         }
-        <button type=" submit" [disabled]="loading()" matButton="filled">
+        <button type=" submit" [disabled]="loading()" matButton="tonal">
             @if (loading()) {
             <mat-spinner diameter="20"></mat-spinner>
             } @else {
@@ -61,7 +61,7 @@
         @if (error) {
         <mat-error class="error">{{error}}</mat-error>
         }
-        <button [disabled]="loading()" type="submit" matButton="filled">
+        <button [disabled]="loading()" type="submit" matButton="tonal">
             @if (loading()) {
             <mat-spinner diameter="20"></mat-spinner>
             } @else {

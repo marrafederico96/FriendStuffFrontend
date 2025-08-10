@@ -4,7 +4,8 @@ import { EventDto } from '../dto/eventDto';
 import { Observable } from 'rxjs';
 import { EventMemberDto, UserNameDto } from '../dto/userInfoDto';
 import { environment } from '../../environments/environment';
-import { ExpenseEventDto } from '../dto/expenseEventDto';
+import { ExpenseEventDto, ExpenseRefundDto } from '../dto/expenseEventDto';
+import { BalanceDto, ResponseBalanceDto } from '../dto/balanceDto';
 
 @Injectable({
     providedIn: 'root'
@@ -33,6 +34,14 @@ export class EventService {
 
     addExpense(expenseData: ExpenseEventDto): Observable<void> {
         return this.http.post<void>(`${this.url}/expense/add`, expenseData);
+    }
+
+    addRefund(refundData: ExpenseRefundDto): Observable<void> {
+        return this.http.post<void>(`${this.url}/expenserefund/add`, refundData);
+    }
+
+    getBalances(balanceData: BalanceDto): Observable<ResponseBalanceDto[]> {
+        return this.http.post<ResponseBalanceDto[]>(`${this.url}/expense/balance`, balanceData);
     }
 
     getRole(role: number): string {

@@ -70,8 +70,8 @@ export class ExpensesComponent implements OnInit {
 
     generateForm() {
         this.expenseForm = this.fb.group({
-            expenseName: [''],
-            amount: ['', Validators.min(0.01)],
+            expenseName: ['', Validators.required],
+            amount: ['', [Validators.required, Validators.min(0.01)]],
             participants: this.fb.array(
                 this.expenseParticipants().map(() => new FormControl(false)))
         });
@@ -79,9 +79,8 @@ export class ExpensesComponent implements OnInit {
 
     onSubmit() {
         if (this.expenseForm.valid) {
+            const formData: ExpenseEventDto = this.expenseForm.value;
             this.loading.set(true);
-            const formData = this.expenseForm.value;
-
             const selectedParticipants = this.expenseForm.value.participants
                 .map((checked: boolean, i: number) =>
                     checked ? { userName: this.expenseParticipants()[i].userName } : null
@@ -103,13 +102,11 @@ export class ExpensesComponent implements OnInit {
             newExpense.expenseParticipant = selectedParticipants;
             newExpense.eventName = this.eventName();
 
-            console.log(newExpense.expenseParticipant);
-
             this.eventService.addExpense(newExpense).subscribe({
                 next: () => {
                     this.loading.set(false);
-                    this.expenseForm.reset();
                     this.error = undefined;
+                    this.expenseForm.reset();
                     this.authService.loadUserInfo();
                 },
                 error: (err) => {
