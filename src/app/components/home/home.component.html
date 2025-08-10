@@ -3,9 +3,9 @@
     <h2>Your Balance</h2>
     <mat-card appearance="outlined" style="margin: 20px 0">
       <mat-card-content>
-        @if (this.balances().length > 0) {
+        @if (this.nonZeroBalances.length > 0) {
         <mat-chip-set>
-          @for (balance of this.balances(); track balance) {
+          @for (balance of nonZeroBalances; track balance) {
           @if(balance.balanceAmount < 0) {
           <mat-chip>
             You must recive
@@ -25,9 +25,11 @@
             {{ balance.payerUsername }} </mat-chip
           >} }
         </mat-chip-set>
-        } @else {
+        } @else { @if(errorBalance) {
+        <mat-error>{{ errorBalance }}</mat-error>
+        }@else {
         <h3>No Balance yet</h3>
-        }
+        } }
       </mat-card-content>
     </mat-card>
     <mat-card appearance="outlined">
@@ -53,6 +55,9 @@
             formControlName="amountRefund"
           />
         </mat-form-field>
+        @if(errorRefund) {
+        <mat-error>{{ errorRefund }}</mat-error>
+        }
         <button matButton="tonal" [disabled]="loading()">
           @if (loading()) {
           <mat-spinner diameter="20"></mat-spinner>

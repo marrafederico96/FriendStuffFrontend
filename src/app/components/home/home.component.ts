@@ -1,25 +1,44 @@
-import { Component, computed, effect, inject, model, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  inject,
+  model,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import {
-  MatDialog,
-} from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { EventFormComponent } from '../event/event-form/event-form.component';
 import { EventService } from '../../services/event.service';
-import { MatInputModule } from "@angular/material/input";
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { MatInputModule } from '@angular/material/input';
+import {
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ExpenseRefundDto } from '../../dto/expenseEventDto';
 import { BalanceDto, ResponseBalanceDto } from '../../dto/balanceDto';
 
 @Component({
   selector: 'app-home',
-  imports: [MatCardModule, ReactiveFormsModule, MatIconModule, MatChipsModule, MatButtonModule, MatInputModule, MatProgressSpinnerModule],
+  imports: [
+    MatCardModule,
+    ReactiveFormsModule,
+    MatIconModule,
+    MatChipsModule,
+    MatButtonModule,
+    MatInputModule,
+    MatProgressSpinnerModule,
+  ],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.scss'
+  styleUrl: './home.component.scss',
 })
 export class HomeComponent implements OnInit {
   public authService = inject(AuthService);
@@ -35,7 +54,8 @@ export class HomeComponent implements OnInit {
   public balances = signal<ResponseBalanceDto[]>([]);
   public updateBalances = computed(() => this.balances());
 
-  public error?: string;
+  public errorBalance?: string;
+  public errorRefund?: string;
 
   constructor() {
     effect(() => {
@@ -47,7 +67,6 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.generateForm();
-
   }
 
   public abs(value: number): number {
@@ -57,8 +76,8 @@ export class HomeComponent implements OnInit {
   generateForm() {
     this.refundForm = this.fb.group({
       amountRefund: ['', [Validators.required, Validators.min(0.01)]],
-      payerUsername: ['', [Validators.required]]
-    })
+      payerUsername: ['', [Validators.required]],
+    });
   }
 
   onSubmit() {
@@ -69,11 +88,28 @@ export class HomeComponent implements OnInit {
       const newRefund: ExpenseRefundDto = {
         amountRefund: refundData.amountRefund,
         debtorUsername: this.authService.userInfo()?.userName ?? '',
-        payerUsername: refundData.payerUsername
+        payerUsername: refundData.payerUsername,
       };
 
+      this.eventService.addRefund(newRefund).subscribe({
+        next: () => {
+          this.loading.set(false);
+          this.getBalances();
+          this.errorRefund = undefined;
+          this.refundForm.reset();
+        },
+        error: (err) => {
+          this.loading.set(false);
+          this.errorRefund = err.error.message;
+        },
+      });
     }
   }
+
+  get nonZeroBalances() {
+    return this.balances().filter((b) => b.balanceAmount !== 0);
+  }
+
   getBalances() {
     const balanceData: BalanceDto = {
       loggedUsername: this.authService.userInfo()?.userName ?? '',
@@ -84,8 +120,8 @@ export class HomeComponent implements OnInit {
         this.balances.set(response);
       },
       error: (err) => {
-        this.error = err.error?.message ?? 'Error fetching balances';
-      }
+        this.errorBalance = err.error.message;
+      },
     });
   }
 
@@ -95,6 +131,4 @@ export class HomeComponent implements OnInit {
       disableClose: true,
     });
   }
-
-
 }
