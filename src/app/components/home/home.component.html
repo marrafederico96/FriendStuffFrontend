@@ -25,11 +25,9 @@
             {{ balance.payerUsername }} </mat-chip
           >} }
         </mat-chip-set>
-        } @else { @if(errorBalance) {
-        <mat-error>{{ errorBalance }}</mat-error>
-        }@else {
+        } @else {
         <h3>No Balance yet</h3>
-        } }
+        }
       </mat-card-content>
     </mat-card>
     <mat-card appearance="outlined">
@@ -45,6 +43,7 @@
             type="text"
             formControlName="payerUsername"
           />
+          <mat-icon matPrefix>person</mat-icon>
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>Add Refund</mat-label>
@@ -54,6 +53,7 @@
             type="number"
             formControlName="amountRefund"
           />
+          <mat-icon matPrefix>euro</mat-icon>
         </mat-form-field>
         @if(errorRefund) {
         <mat-error>{{ errorRefund }}</mat-error>
