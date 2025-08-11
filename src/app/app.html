@@ -1,8 +1,9 @@
 @if(!this.authService.loading()) {
 <app-header></app-header>
 <main class="container">
-    <router-outlet></router-outlet>
+  <router-outlet></router-outlet>
 </main>
+<app-footer></app-footer>
 } @else{
 <mat-progress-bar mode="indeterminate"></mat-progress-bar>
 }
