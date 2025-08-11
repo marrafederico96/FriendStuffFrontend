@@ -1,7 +1,9 @@
 .footer-container {
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 100%;
   height: 200px;
+  text-wrap: balance;
   gap: 20px;
 }
