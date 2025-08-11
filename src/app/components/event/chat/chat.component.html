@@ -1,7 +1,8 @@
 <mat-card appearance="outlined" class="chat-container">
   <mat-card-content style="height: inherit; overflow-y: auto" #chatContainer>
     @for (msg of this.messages(); track msg) {
-    <div
+    <mat-card
+      appearance="raised"
       class="message-container"
       [class.message-sent]="
         msg.senderUsername === this.authService.userInfo()?.userName
@@ -12,7 +13,7 @@
     >
       <small>{{ msg.senderUsername }}</small>
       <div>{{ msg.messageContent }}</div>
-    </div>
+    </mat-card>
     }
   </mat-card-content>
 </mat-card>

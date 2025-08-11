@@ -141,7 +141,7 @@ export class Chat implements OnInit, AfterViewChecked, OnDestroy {
       })
       .catch((err) => console.error('error connection to signalR', err));
 
-    this.connection.on('ReceiveMessage', (message: any) => {
+    this.connection.on('ReceiveMessage', (message: MessageDto) => {
       this.addMessage(message);
     });
   }
