@@ -4,6 +4,7 @@ import {
   computed,
   ElementRef,
   inject,
+  OnDestroy,
   OnInit,
   signal,
   ViewChild,
@@ -21,6 +22,9 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MessageDto } from '../../../dto/eventDto';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
+import * as signalR from '@microsoft/signalr';
+import { environment } from '../../../../environments/environment';
+
 @Component({
   selector: 'app-chat',
   imports: [
@@ -36,10 +40,12 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.scss',
 })
-export class Chat implements OnInit, AfterViewChecked {
+export class Chat implements OnInit, AfterViewChecked, OnDestroy {
   public authService = inject(AuthService);
   private eventService = inject(EventService);
   private fb = inject(FormBuilder);
+
+  private connection!: signalR.HubConnection;
 
   public messageForm!: FormGroup;
   public error?: string;
@@ -77,6 +83,13 @@ export class Chat implements OnInit, AfterViewChecked {
     const name = urlSegments[urlSegments.length - 1].path;
     this.eventName.set(name);
     this.generateForm();
+    this.startSignalRConnection();
+  }
+
+  ngOnDestroy() {
+    if (this.connection) {
+      this.connection.stop();
+    }
   }
 
   generateForm() {
@@ -97,7 +110,6 @@ export class Chat implements OnInit, AfterViewChecked {
         senderUsername: sender,
       };
 
-      console.log(message);
       this.eventService.sendMessage(message).subscribe({
         next: () => {
           this.authService.loadUserInfo();
@@ -109,6 +121,41 @@ export class Chat implements OnInit, AfterViewChecked {
           this.error = err.error.message;
         },
       });
+    }
+  }
+
+  private startSignalRConnection() {
+    this.connection = new signalR.HubConnectionBuilder()
+      .withUrl(`${environment.url}/messageHub`)
+      .withAutomaticReconnect()
+      .build();
+
+    this.connection
+      .start()
+      .then(() => {
+        this.connection.invoke('JoinEventGroup', this.eventName());
+      })
+      .catch((err) => console.error('error connection to signalR', err));
+
+    this.connection.on('ReceiveMessage', (message: any) => {
+      this.addMessage(message);
+    });
+  }
+
+  private addMessage(message: any) {
+    const currentEventName = this.eventName();
+    if (message.eventName === currentEventName) {
+      const event = this.authService
+        .userEvents()
+        .find((e) => e.normalizedEventName === currentEventName);
+
+      if (event) {
+        event.messages?.push({
+          messageContent: message.content,
+          senderUsername: message.senderUsername,
+          normalizedEventName: this.eventName(),
+        });
+      }
     }
   }
 }
