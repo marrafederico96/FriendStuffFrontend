@@ -1,50 +1,55 @@
 <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
-    <mat-form-field appearance="outline" style="flex: 1;">
-        <mat-label>Search Member</mat-label>
-        <input matInput placeholder="Type a name" name="searchTerm" formControlName="searchUser" />
+  <mat-form-field appearance="outline" style="flex: 1">
+    <mat-label>Search Member</mat-label>
+    <input
+      matInput
+      placeholder="Type a name"
+      name="searchTerm"
+      formControlName="searchUser"
+    />
 
-        <button mat-icon-button matSuffix type="submit">
-            <mat-icon>search</mat-icon>
-        </button>
-    </mat-form-field>
-    @if(error) {
-    <mat-error style="margin-bottom: 20px;">{{error}}</mat-error>
-    }
+    <button mat-icon-button matSuffix type="submit">
+      <mat-icon>search</mat-icon>
+    </button>
+  </mat-form-field>
+  @if(error) {
+  <mat-error style="margin-bottom: 20px">{{ error }}</mat-error>
+  }
 </form>
 
 @if(userToAdd != undefined) {
-<mat-chip style="margin-bottom: 10px;">
-    {{userToAdd}}
-    @if(!isUsernameParticipant()) {
-    <button matChipRemove (click)="addMember()">
-        <mat-icon>add</mat-icon>
-    </button>
-    } @else {
-    <small>(Added)</small>
-    }
-
+<mat-chip style="margin-bottom: 10px">
+  {{ userToAdd }}
+  @if(!isUsernameParticipant()) {
+  <button matChipRemove (click)="addMember()">
+    <mat-icon>add</mat-icon>
+  </button>
+  } @else {
+  <small>(Added)</small>
+  }
 </mat-chip>
-<mat-divider style="margin-bottom: 20px;"></mat-divider>
+<mat-divider style="margin-bottom: 20px"></mat-divider>
 }
 
-<mat-card appearance="raised" style="padding: 16px;">
-    <mat-card-header style="margin-bottom: 10px;">
-        <mat-card-title>Members</mat-card-title>
-    </mat-card-header>
-    <mat-card appearance="outlined">
-        <mat-card-content>
-            <mat-chip-set>
-                @for (participant of eventUser()?.participants; track participant){
-                <mat-chip>
-                    {{ participant.userName }} ({{ eventService.getRole(participant.role) }})
-                    @if (eventService.getRole(participant.role) === "Member") {
-                    <button matChipRemove (click)="removeMember(participant.userName)">
-                        <mat-icon>cancel</mat-icon>
-                    </button>
-                    }
-                </mat-chip>
-                }
-            </mat-chip-set>
-        </mat-card-content>
-    </mat-card>
+<mat-card appearance="raised" style="padding: 16px">
+  <mat-card-header style="margin-bottom: 10px">
+    <mat-card-title>Members</mat-card-title>
+  </mat-card-header>
+  <mat-card appearance="outlined">
+    <mat-card-content>
+      <mat-chip-set>
+        @for (participant of eventUser()?.participants; track participant){
+        <mat-chip>
+          {{ participant.userName }} ({{
+            eventService.getRole(participant.role)
+          }}) @if (eventService.getRole(participant.role) === "Member") {
+          <button matChipRemove (click)="removeMember(participant.userName)">
+            <mat-icon>cancel</mat-icon>
+          </button>
+          }
+        </mat-chip>
+        }
+      </mat-chip-set>
+    </mat-card-content>
+  </mat-card>
 </mat-card>

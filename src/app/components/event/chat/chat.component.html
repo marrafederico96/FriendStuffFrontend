@@ -1,0 +1,38 @@
+<mat-card appearance="outlined" class="chat-container">
+  <mat-card-content style="height: inherit; overflow-y: auto" #chatContainer>
+    @for (msg of this.messages(); track msg) {
+    <div
+      class="message-container"
+      [class.message-sent]="
+        msg.senderUsername === this.authService.userInfo()?.userName
+      "
+      [class.message-received]="
+        msg.senderUsername !== this.authService.userInfo()?.userName
+      "
+    >
+      <small>{{ msg.senderUsername }}</small>
+      <div>{{ msg.messageContent }}</div>
+    </div>
+    }
+  </mat-card-content>
+</mat-card>
+
+<form [formGroup]="messageForm" (ngSubmit)="onSubmit()">
+  <mat-form-field appearance="outline" class="input-field">
+    <mat-label>Send Message</mat-label>
+    <input
+      matInput
+      type="text"
+      placeholder="Send Message"
+      name="message"
+      formControlName="messageContent"
+    />
+    <button mat-icon-button matSuffix type="submit" [disabled]="this.loading()">
+      @if (loading()) {
+      <mat-spinner diameter="20"></mat-spinner>
+      } @else {
+      <mat-icon>send</mat-icon>
+      }
+    </button>
+  </mat-form-field>
+</form>

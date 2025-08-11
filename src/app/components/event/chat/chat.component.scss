@@ -1,0 +1,47 @@
+.chat-container {
+  height: 80vh;
+  margin-top: 20px;
+  overflow-y: auto;
+}
+
+.message-container {
+  max-width: 60%;
+  padding: 10px 14px;
+  border-radius: 16px;
+  margin: 6px 0;
+  position: relative;
+  word-break: break-word;
+}
+
+.message-sent {
+  border: 1px solid #44474e;
+  margin-left: auto;
+  border-bottom-right-radius: 0;
+}
+
+.message-sent::after {
+  content: "";
+  position: absolute;
+  right: -10px;
+  bottom: 0;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+}
+
+.message-received {
+  border: 1px solid #44474e;
+  margin-right: auto;
+  border-bottom-left-radius: 0;
+}
+
+form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.input-field {
+  flex: 1;
+  padding: 8px 16px;
+}
