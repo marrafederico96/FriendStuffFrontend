@@ -1,5 +1,11 @@
 import { HttpClient } from '@angular/common/http';
-import { computed, inject, Injectable, PLATFORM_ID, signal } from '@angular/core';
+import {
+  computed,
+  inject,
+  Injectable,
+  PLATFORM_ID,
+  signal,
+} from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { TokenDto } from '../dto/tokenDto';
 import { UserInfoDto } from '../dto/userInfoDto';
@@ -9,7 +15,7 @@ import { LoginDto, RegisterDto } from '../dto/authDto';
 import { environment } from '../../environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private http = inject(HttpClient);
@@ -26,43 +32,66 @@ export class AuthService {
   }
 
   loginUser(loginData: LoginDto): Observable<TokenDto> {
-    return this.http.post<TokenDto>(`${this.url}/account/login`, loginData, { withCredentials: true }).pipe(
-      tap(token => {
-        if (isPlatformBrowser(this.platformId)) {
-          localStorage.setItem('access_token', token.access_token);
-          this.loadUserInfo();
-        }
+    return this.http
+      .post<TokenDto>(`${this.url}/account/login`, loginData, {
+        withCredentials: true,
       })
-    );
+      .pipe(
+        tap((token) => {
+          if (isPlatformBrowser(this.platformId)) {
+            localStorage.setItem('access_token', token.access_token);
+            this.loadUserInfo();
+          }
+        })
+      );
   }
 
   logoutUser() {
-    return this.http.post(`${this.url}/account/logout`, {}, { withCredentials: true });
+    return this.http.post(
+      `${this.url}/account/logout`,
+      {},
+      { withCredentials: true }
+    );
   }
 
   refreshToken(): Observable<TokenDto> {
-    return this.http.post<TokenDto>(`${this.url}/account/refresh`, {}, { withCredentials: true });
+    return this.http.post<TokenDto>(
+      `${this.url}/account/refresh`,
+      {},
+      { withCredentials: true }
+    );
   }
 
   isLoggedIn(): boolean {
     if (isPlatformBrowser(this.platformId)) {
-      return !!localStorage.getItem("access_token");
+      return !!localStorage.getItem('access_token');
     }
     return false;
   }
 
+  getAccessToken(): string | null {
+    if (isPlatformBrowser(this.platformId)) {
+      return localStorage.getItem('access_token');
+    }
+    return null;
+  }
+
   loadUserInfo(): void {
     if (isPlatformBrowser(this.platformId) && this.isLoggedIn()) {
-      this.http.get<UserInfoDto>(`${this.url}/account/getuser`, { withCredentials: true }).subscribe({
-        next: (user) => {
-          this.userInfo.set(user)
-          this.loading.set(false);
-        },
-        error: () => {
-          this.userInfo.set(null);
-          this.loading.set(false);
-        },
-      });
+      this.http
+        .get<UserInfoDto>(`${this.url}/account/getuser`, {
+          withCredentials: true,
+        })
+        .subscribe({
+          next: (user) => {
+            this.userInfo.set(user);
+            this.loading.set(false);
+          },
+          error: () => {
+            this.userInfo.set(null);
+            this.loading.set(false);
+          },
+        });
     } else if (isPlatformBrowser(this.platformId)) {
       this.loading.set(false);
     }

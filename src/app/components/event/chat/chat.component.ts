@@ -125,8 +125,12 @@ export class Chat implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   private startSignalRConnection() {
+    const token = this.authService.getAccessToken();
+    if (!token) return;
     this.connection = new signalR.HubConnectionBuilder()
-      .withUrl(`${environment.url}/messageHub`)
+      .withUrl(`${environment.url}/messageHub`, {
+        accessTokenFactory: () => token,
+      })
       .withAutomaticReconnect()
       .build();
 
@@ -144,14 +148,14 @@ export class Chat implements OnInit, AfterViewChecked, OnDestroy {
 
   private addMessage(message: any) {
     const currentEventName = this.eventName();
-    if (message.eventName === currentEventName) {
+    if (message.normalizedEventName === currentEventName) {
       const event = this.authService
         .userEvents()
         .find((e) => e.normalizedEventName === currentEventName);
 
       if (event) {
         event.messages?.push({
-          messageContent: message.content,
+          messageContent: message.messageContent,
           senderUsername: message.senderUsername,
           normalizedEventName: this.eventName(),
         });
