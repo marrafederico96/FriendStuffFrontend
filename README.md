@@ -2,9 +2,6 @@
 
 Frontend sviluppato in **Angular** per il progetto **FriendStuff**, un’applicazione web per la gestione delle sepse tra amici.
 
-## 🚀 Demo
-[friendstuff.vercel.app](https://friendstuff.vercel.app)
-
 ---
 ## Demo ##
 
